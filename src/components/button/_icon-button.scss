@@ -1,0 +1,35 @@
+@use '@/shared/variables' as *;
+@use '@/components/ripple';
+@use 'button';
+
+button[icon-button] {
+	@include button.make-basic-button-styles();
+
+	padding: 4px 8px;
+
+	i {
+		margin-inline-end: 8px;
+	}
+
+	&.custom-button--primary {
+		@include button.make-custom-button-variant(
+			$colors__moderate-blue,
+			transparent,
+			mix(transparent, $colors__moderate-blue, 90%),
+			mix(transparent, $colors__moderate-blue, 80%),
+			mix(transparent, $colors__moderate-blue, 50%),
+			false
+		);
+	}
+
+	&.custom-button--danger {
+		@include button.make-custom-button-variant(
+			$colors__soft-red,
+			transparent,
+			mix(transparent, $colors__soft-red, 90%),
+			mix(transparent, $colors__soft-red, 80%),
+			mix(transparent, $colors__soft-red, 50%),
+			false
+		);
+	}
+}

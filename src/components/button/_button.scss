@@ -1,0 +1,83 @@
+@use '@/shared/variables' as *;
+@use '@/components/ripple';
+
+@mixin __make-focus-state($color) {
+    background-color: $color;
+
+    &:hover {
+        background-color: $color;
+    }
+}
+
+@mixin make-custom-button-variant(
+    $color,
+    $background--default,
+    $background--hover,
+    $background--focus,
+    $background--active,
+    $mouse-focus: true
+) {
+    background-color: $background--default;
+    color: $color;
+
+    &:hover {
+        background-color: $background--hover;
+    }
+
+    @include ripple.adjust-ripple($background--active);
+
+    &.focus-visible {
+        @include __make-focus-state($background--focus);
+    }
+
+    @if $mouse-focus {
+    }
+}
+
+@mixin make-basic-button-styles {
+    line-height: 1.5;
+    font-size: 1.2rem;
+    font-family: Rubik;
+    font-weight: 500;
+    overflow: hidden;
+    border: none;
+    border-radius: 6px;
+    position: relative;
+    z-index: 1;
+}
+
+button[custom-button] {
+    @include make-basic-button-styles();
+
+    padding: 10px 16px;
+
+    &.custom-button--primary {
+        @include make-custom-button-variant(
+            $colors__white,
+            $colors__moderate-blue,
+            mix($colors__light-grayish-blue, $colors__moderate-blue, 50%),
+            $colors__light-grayish-blue,
+            mix($colors__light-grayish-blue, $colors__white, 75%)
+        );
+    }
+
+    &.custom-button--danger {
+        @include make-custom-button-variant(
+            $colors__white,
+            $colors__soft-red,
+            mix($colors__pale-red, $colors__soft-red, 50%),
+            $colors__pale-red,
+            mix($colors__pale-red, $colors__white, 75%)
+        );
+    }
+
+    &.custom-button--secondary {
+        @include make-custom-button-variant(
+            $colors__white,
+            $colors__grayish-blue,
+            mix($colors__light-gray, $colors__grayish-blue, 25%),
+            mix($colors__light-gray, $colors__grayish-blue, 50%),
+            mix($colors__light-gray, $colors__grayish-blue, 75%)
+        );
+    }
+}

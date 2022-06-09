@@ -1,0 +1,27 @@
+@use '@/shared/variables.scss' as *;
+
+.comment-form {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background-color: $colors__white;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+
+    .comment-form__image {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+
+    .comment-form__control {
+        flex: 1;
+        min-height: 84px;
+        resize: none;
+    }
+
+    .comment-form__submit-button {
+        min-width: 84px;
+    }
+}

@@ -1,0 +1,66 @@
+[
+    {
+        "id": "562c20fa-145f-41c8-a643-fee9078a3647",
+        "email": "anil-volkov172@blueyonder.biz",
+        "firstName": "Anil",
+        "lastName": "Volkov",
+        "phone": "+855 14 938 893",
+        "img": "https://i.pravatar.cc/100?u=562c20fa-145f-41c8-a643-fee9078a3647",
+        "username": "Anil_Volkov",
+        "address": {
+            "street": "1254 Laurianne Glens",
+            "city": "Port Adalberto",
+            "zipCode": "68564",
+            "county": "Staffordshire",
+            "country": "New Caledonia"
+        }
+    },
+    {
+        "id": "09025c12-ba8c-46ff-a998-19ae22fefbf4",
+        "email": "omercortes@arcor.name",
+        "firstName": "Omer",
+        "lastName": "Cortes",
+        "phone": "+216 71 502 957",
+        "img": "https://i.pravatar.cc/100?u=09025c12-ba8c-46ff-a998-19ae22fefbf4",
+        "username": "Omer_Cortes30",
+        "address": {
+            "street": "1409 Eugenia Heights",
+            "city": "Lake Anthony",
+            "zipCode": "81414",
+            "county": "East Riding of Yorkshire",
+            "country": "Czech Republic"
+        }
+    },
+    {
+        "id": "d506d658-da0a-46c7-aafc-b50bbaa5d7c4",
+        "email": "weirotich@windstream.net",
+        "firstName": "Wei",
+        "lastName": "Rotich",
+        "phone": "+249 73 106 5665",
+        "img": "https://i.pravatar.cc/100?u=d506d658-da0a-46c7-aafc-b50bbaa5d7c4",
+        "username": "Wei.Rotich",
+        "address": {
+            "street": "30 Elian Road",
+            "city": "Katrinaside",
+            "zipCode": "49936",
+            "county": "Greater London",
+            "country": "Slovakia (Slovak Republic)"
+        }
+    },
+    {
+        "id": "ba8617cb-19d9-413d-9a12-2a55ab754bc9",
+        "email": "masami+mondal271@wanadoo.dev",
+        "firstName": "Masami",
+        "lastName": "Mondal",
+        "phone": "+504 2881 2128",
+        "img": "https://i.pravatar.cc/100?u=ba8617cb-19d9-413d-9a12-2a55ab754bc9",
+        "username": "Masami.Mondal",
+        "address": {
+            "street": "1387 Collins Lane",
+            "city": "New Wallaceberg",
+            "zipCode": "70708",
+            "county": "Oxfordshire",
+            "country": "Estonia"
+        }
+    }
+]

@@ -1,0 +1,11 @@
+@use '@/shared/variables.scss' as *;
+
+.subcomments {
+    padding-left: 15px;
+    border-left: 1px solid $colors__light-gray;
+
+    @media (min-width: $lg-breakpoint) {
+        padding-left: 31px;
+        margin-left: 32px;
+    }
+}

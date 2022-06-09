@@ -1,0 +1,31 @@
+@use './normalize.css';
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	-webkit-font-smoothing: antialiased;
+	padding: 0;
+	margin: 0;
+	font-weight: inherit;
+}
+
+body,
+html {
+	height: 100%;
+	font-size: 62.5%;
+	font-family: Rubik;
+}
+
+b,
+strong {
+	font-weight: bold;
+}
+
+a,
+a:hover,
+a:focus {
+	cursor: pointer;
+	text-decoration: none;
+	outline: 0;
+}

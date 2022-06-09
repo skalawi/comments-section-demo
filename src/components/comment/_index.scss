@@ -1,0 +1,99 @@
+@use '@/shared/variables.scss' as *;
+
+.comment {
+    line-height: 1.5;
+    font-size: 1.2rem;
+    font-family: Rubik;
+    display: grid;
+    background-color: $colors__white;
+    border-radius: 8px;
+    padding: 16px;
+    color: $colors__grayish-blue;
+    row-gap: 16px;
+    margin-bottom: 16px;
+    grid-template-columns: min-content auto min-content;
+
+    .comment__rating {
+        align-self: center;
+        grid-row: 3;
+    }
+
+    .comment__title {
+        grid-row: 1;
+        grid-column: span 2;
+    }
+    .comment__message,
+    .comment__control {
+        grid-row: 2;
+        grid-column: span 3;
+    }
+    .comment__actions {
+        justify-self: flex-end;
+        align-self: center;
+        display: flex;
+        gap: 4px;
+        grid-row: 3;
+    }
+
+    .comment__control {
+        width: 100%;
+    }
+
+    .comment__submit-button {
+        margin-left: 8px;
+        grid-row: 3;
+    }
+
+    @media (min-width: $lg-breakpoint) {
+        column-gap: 24px;
+        grid-template-columns: auto 1fr auto;
+
+        .comment__rating {
+            grid-row: 1 / span 2;
+            grid-column: 1;
+            align-self: flex-start;
+        }
+        .comment__title {
+            grid-row: 1;
+            grid-column: 2;
+        }
+        .comment__message,
+        .comment__control {
+            grid-row: 2;
+            grid-column: span 2;
+        }
+        .comment__actions {
+            grid-row: 1;
+        }
+
+        .comment__submit-button {
+            grid-column: 3;
+            justify-self: end;
+        }
+    }
+
+    .title {
+        display: flex;
+        align-items: center;
+        column-gap: 16px;
+
+        .title__name {
+            font-weight: bold;
+            color: $colors__dark-blue;
+        }
+
+        .title__image {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .title__label {
+            background-color: $colors__moderate-blue;
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: $colors__white;
+        }
+    }
+}

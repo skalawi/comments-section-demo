@@ -1,0 +1,93 @@
+@use '@/shared/variables.scss' as *;
+
+modal {
+	width: fit-content;
+
+	.dialog {
+		width: inherit;
+		padding: 24px;
+		margin: auto;
+		border: none;
+		border-radius: 8px;
+		background-color: $colors__white;
+
+		header {
+			margin-bottom: 12px;
+			font-size: 1.6rem;
+			line-height: 1.5;
+		}
+
+		footer {
+			margin-top: 12px;
+			display: flex;
+			justify-content: space-between;
+			gap: 10px;
+
+			button {
+				flex: 1;
+			}
+		}
+
+		header,
+		footer {
+			& > * {
+				display: contents;
+			}
+		}
+
+		&::backdrop {
+			background-color: rgba(0, 0, 0, 0.5);
+		}
+
+		&[open] {
+			display: flex;
+			flex-direction: column;
+			animation: show-dialog 0.3s ease normal;
+
+			&::backdrop {
+				animation: show-backdrop 0.3s ease normal;
+			}
+
+			&.dialog--closing {
+				animation: hide-dialog 0.2s ease normal forwards;
+
+				&::backdrop {
+					animation: hide-backdrop 0.32s ease normal;
+				}
+			}
+		}
+	}
+}
+
+@keyframes show-dialog {
+	from {
+		transform: translateY(50%);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes hide-dialog {
+	to {
+		transform: translateY(-50%);
+		opacity: 0;
+	}
+}
+
+@keyframes show-backdrop {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes hide-backdrop {
+	to {
+		opacity: 0;
+	}
+}

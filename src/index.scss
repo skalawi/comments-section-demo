@@ -1,0 +1,65 @@
+@use 'shared/variables' as *;
+@use 'shared/normalize';
+@use 'shared/fonts';
+@use 'components/button';
+@use 'components/textarea';
+@use 'components/ripple';
+@use 'components/dialog';
+@use 'components/rating';
+@use 'components/comment';
+@use 'components/comment-list';
+@use 'components/comment-form';
+
+html {
+    font-size: 10px;
+}
+
+body {
+    background-color: $colors__very-light-gray;
+}
+
+* {
+    &:focus,
+    &.focus-visible {
+        outline: none;
+    }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    font-weight: bold;
+    color: $colors__dark-blue;
+    font-size: inherit;
+}
+
+p {
+    color: $colors__grayish-blue;
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.delete-dialog {
+    .dialog {
+        width: 276px;
+    }
+}
+
+.main-container {
+    width: 100%;
+    padding: 24px 16px;
+    margin: 0 auto;
+
+    @media (min-width: $lg-breakpoint) {
+        max-width: 720px;
+    }
+
+    @media (min-width: $xl-breakpoint) {
+        max-width: 938px;
+    }
+}

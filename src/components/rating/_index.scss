@@ -1,0 +1,85 @@
+@use '@/shared/variables.scss' as *;
+@use '@/components/ripple';
+
+rating {
+	display: inline-flex;
+
+	line-height: 1.5;
+	font-size: 1.2rem;
+	font-family: Rubik;
+	font-weight: 500;
+	background-color: $colors__light-gray;
+	border-radius: 6px;
+	align-items: stretch;
+	color: $colors__moderate-blue;
+	font-weight: bold;
+
+	width: 78px;
+	overflow: hidden;
+
+	&:focus,
+	&.focus-visible {
+		background-color: mix($colors__light-gray, $colors__grayish-blue, 95%);
+	}
+
+	@media (min-width: $lg-breakpoint) {
+		flex-direction: column;
+		width: 32px;
+		height: auto;
+	}
+
+	.rating__button {
+		border: none;
+		padding: 0;
+		position: relative;
+		z-index: 0;
+		background: none;
+		color: $colors__light-grayish-blue;
+		min-width: 30px;
+		min-height: 32px;
+		line-height: 1.5;
+
+		&:first-of-type {
+			padding: 0 4px 0 8px;
+		}
+
+		&:last-of-type {
+			padding: 0 8px 0 4px;
+		}
+
+		@media (min-width: $lg-breakpoint) {
+			&:first-of-type {
+				padding: 8px 0 4px 0;
+			}
+
+			&:last-of-type {
+				padding: 4px 0 8px 0;
+			}
+		}
+
+		&:hover {
+			background-color: mix(
+				$colors__light-gray,
+				$colors__grayish-blue,
+				90%
+			);
+			color: $colors__moderate-blue;
+		}
+
+		@include ripple.adjust-ripple(
+			mix($colors__light-gray, $colors__grayish-blue, 50%)
+		);
+
+		&.rating__button--checked {
+			color: $colors__moderate-blue;
+		}
+	}
+
+	.rating__label {
+		margin: auto;
+
+		@media (min-width: $lg-breakpoint) {
+			margin: 4px auto;
+		}
+	}
+}
