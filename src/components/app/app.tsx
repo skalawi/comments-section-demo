@@ -17,7 +17,6 @@ import {
     CommentData,
     CommentPayload,
     CurrentUserData,
-    UserRatingData,
 } from '../../models/models';
 
 interface CommentsService {
@@ -40,7 +39,9 @@ type CommentListProvider = {
     user?: CurrentUserData;
 };
 
-export const HOST = 'http://localhost:8080';
+const port = process.env.PORT || 3000;
+
+export const HOST = `http://localhost:${port}`;
 
 export const COMMENTS_SERVICE =
     createContext<CommentListProvider>('CommentList');

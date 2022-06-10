@@ -9,6 +9,9 @@ export default defineConfig(() => {
                 '@': `${__dirname}/src`,
             },
         },
+        server: {
+            port: 8080,
+        },
         plugins: [fastifyServer(), qwikVite()],
     };
 });

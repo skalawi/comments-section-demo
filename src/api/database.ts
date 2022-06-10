@@ -10,7 +10,6 @@ import {
     CurrentUserData,
     UserData,
 } from '../models/models';
-
 interface Rating {
     ratingId: RatingID;
     userId: UserID;
@@ -25,10 +24,6 @@ interface Comment {
     message: string;
     date: string;
 }
-
-const loadFile = (name: string) => {
-    return readFile(join(__dirname, '..', 'data', name), { encoding: 'utf-8' });
-};
 
 const resourceNotFoundMessage =
     (resource: string) =>
@@ -48,6 +43,8 @@ export class Database {
     private preparedComments: CommentData[] = [];
     private modifiedComments: Map<CommentID, CommentData | ChildComment> =
         new Map();
+
+    constructor(private readonly ROOT: string) {}
 
     async init(): Promise<void> {
         await Promise.all([
@@ -197,7 +194,7 @@ export class Database {
     }
 
     private async loadComments(): Promise<void> {
-        const commentsData = await loadFile('comments.json');
+        const commentsData = await this.loadFile('comments.json');
         this.COMMENTS = JSON.parse(commentsData);
         this.COMMENTS = this.COMMENTS.sort((a, b) => {
             const first = new Date(a.date);
@@ -207,12 +204,12 @@ export class Database {
     }
 
     private async loadUsers(): Promise<void> {
-        const usersData = await loadFile('users.json');
+        const usersData = await this.loadFile('users.json');
         this.USERS = JSON.parse(usersData);
     }
 
     private async loadRatings(): Promise<void> {
-        const ratingData = await loadFile('ratings.json');
+        const ratingData = await this.loadFile('ratings.json');
         this.RATINGS = JSON.parse(ratingData);
     }
 
@@ -267,5 +264,9 @@ export class Database {
             name: `${user.firstName} ${user.lastName}`,
             userName: user.username,
         };
+    }
+
+    private loadFile(name: string) {
+        return readFile(join(this.ROOT, 'data', name), { encoding: 'utf-8' });
     }
 }
