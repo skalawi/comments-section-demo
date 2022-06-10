@@ -1,16 +1,29 @@
 import { join, dirname } from 'path';
 import Fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
-import api from './routes';
+import api from './api/routes';
 import fastifyCookie from '@fastify/cookie';
 import fastifySession from '@fastify/session';
-import { Database } from './database';
+import { Database } from './api/database';
 import { fileURLToPath } from 'url';
+import { readFileSync } from 'fs';
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const isSsl = (!process.env.SSL_CLIENT_ONLY && process.env.SSL) || false;
+
+const sslOptions = isSsl
+    ? {
+          https: {
+              cert: readFileSync(join(ROOT, 'certs', 'cert.pem')),
+              key: readFileSync(join(ROOT, 'certs', 'key.pem')),
+              passphrase: 'laslas',
+          },
+      }
+    : {};
 
 export const fastify = Fastify({
     logger: { prettyPrint: true, level: 'warn' },
+    ...sslOptions,
 });
 
 const db = new Database(ROOT);

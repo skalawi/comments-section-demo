@@ -8,6 +8,7 @@ functions/**/*.js
 node_modules
 package-lock.json
 fonts
+!public/fonts
 images
 
 # Cache

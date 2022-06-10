@@ -39,9 +39,11 @@ type CommentListProvider = {
     user?: CurrentUserData;
 };
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
+const address = process.env.HOST || 'localhost';
+const protocol = process.env.SSL ? 'https' : 'http';
 
-export const HOST = `http://localhost:${port}`;
+export const HOST = `${protocol}://${address}:${port}`;
 
 export const COMMENTS_SERVICE =
     createContext<CommentListProvider>('CommentList');
@@ -101,7 +103,7 @@ export const initializeFocusTrap = (state: FocusTrapProvider) => {
 export const initializeCommentsService = (state: CommentListProvider) => {
     const service = {
         async addComment(payload: CommentPayload) {
-            await fetch(`${HOST}/api/comments`, {
+            await fetch(`api/comments`, {
                 method: 'POST',
                 body: JSON.stringify(payload),
             });
@@ -109,7 +111,7 @@ export const initializeCommentsService = (state: CommentListProvider) => {
         },
 
         async addChildComment(payload: CommentPayload, id: string) {
-            await fetch(`${HOST}/api/comments/${id}`, {
+            await fetch(`api/comments/${id}`, {
                 method: 'POST',
                 body: JSON.stringify(payload),
             });
@@ -117,7 +119,7 @@ export const initializeCommentsService = (state: CommentListProvider) => {
         },
 
         async updateComment(id: string, payload: CommentPayload) {
-            await fetch(`${HOST}/api/comments/${id}`, {
+            await fetch(`api/comments/${id}`, {
                 method: 'PUT',
                 body: JSON.stringify(payload),
             });
@@ -125,14 +127,14 @@ export const initializeCommentsService = (state: CommentListProvider) => {
         },
 
         async deleteComment(id: string) {
-            await fetch(`${HOST}/api/comments/${id}`, {
+            await fetch(`api/comments/${id}`, {
                 method: 'DELETE',
             });
             await updateCommentList(state);
         },
 
         async addRating(rating: number, id: string) {
-            await fetch(`${HOST}/api/ratings`, {
+            await fetch(`api/ratings`, {
                 method: 'POST',
                 body: JSON.stringify({ rating, commentId: id }),
             });
@@ -141,7 +143,7 @@ export const initializeCommentsService = (state: CommentListProvider) => {
         },
 
         async editRating(rating: number, id: string) {
-            await fetch(`${HOST}/api/ratings/${id}`, {
+            await fetch(`api/ratings/${id}`, {
                 method: 'PUT',
                 body: JSON.stringify({ rating }),
             });
@@ -153,7 +155,7 @@ export const initializeCommentsService = (state: CommentListProvider) => {
 };
 
 export const updateCommentList = async (state: CommentListProvider) => {
-    const comments = await fetch(`${HOST}/api/comments`, {
+    const comments = await fetch(`api/comments`, {
         method: 'GET',
     });
     const res = await comments.json();
@@ -161,7 +163,7 @@ export const updateCommentList = async (state: CommentListProvider) => {
 };
 
 export const updateUserRatings = async (state: CommentListProvider) => {
-    const response = await fetch(`${HOST}/api/me`, {
+    const response = await fetch(`api/me`, {
         method: 'GET',
     });
     state.user = await response.json();

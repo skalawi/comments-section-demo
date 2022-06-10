@@ -1,5 +1,5 @@
 import type { Plugin } from 'vite';
-import { fastify } from './src/api/server';
+import { fastify } from './src/server';
 
 export const fastifyServer = (): Plugin => {
     return {
