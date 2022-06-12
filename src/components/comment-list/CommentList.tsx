@@ -1,11 +1,18 @@
-import { useStore, component$, Host } from '@builder.io/qwik';
+import {
+    useStore,
+    component$,
+    Host,
+    useWatch$,
+    useContext,
+    useRef,
+    Ref,
+} from '@builder.io/qwik';
 import { Dialog } from '../dialog/Dialog';
 import { Ripple } from '../ripple/Ripple';
 import { Comment } from '../comment/Comment';
-
-import { deleteComment, onDeleteCancel, onDeleteComment } from './utils';
 import { CommentData, UserData } from '../../models/models';
 import { CommentForm } from '../comment-form/comment-form';
+import { COMMENTS_SERVICE } from '../app/app';
 
 export interface CommentListProps {
     comments: CommentData[];
@@ -19,11 +26,21 @@ export interface ListState {
 
 export const CommentList = component$(
     (props: CommentListProps) => {
+        const { commentsService } = useContext(COMMENTS_SERVICE);
         const state: ListState = useStore({
             deleteDialogOpened: false,
-            deleteId: undefined,
             activeComments: {},
         });
+        const dialogContext = useRef<string>();
+        useWatch$((track) => {
+            const id = track(dialogContext, 'current');
+            if (id) {
+                state.deleteDialogOpened = true;
+            } else {
+                state.deleteDialogOpened = false;
+            }
+        });
+
         return (
             <Host class='main-container'>
                 {props.comments.map((comment) => {
@@ -38,6 +55,9 @@ export const CommentList = component$(
                                     state.activeComments[parentId] =
                                         parentComment.user;
                                 }}
+                                onDelete$={() => {
+                                    dialogContext.current = comment.commentId;
+                                }}
                             ></Comment>
                             <section class='subcomments'>
                                 {children.map((childComment) => (
@@ -47,6 +67,10 @@ export const CommentList = component$(
                                         onReply$={() => {
                                             state.activeComments[parentId] =
                                                 childComment.user;
+                                        }}
+                                        onDelete$={() => {
+                                            dialogContext.current =
+                                                childComment.commentId;
                                         }}
                                     ></Comment>
                                 ))}
@@ -69,7 +93,7 @@ export const CommentList = component$(
                 <Dialog
                     class='delete-dialog'
                     opened={state.deleteDialogOpened}
-                    onDialogclose$={() => onDeleteCancel(state)}
+                    onDialogclose$={() => onDeleteCancel(dialogContext)}
                 >
                     <h1 q:slot='header'>Delete comment</h1>
                     <p>
@@ -80,7 +104,7 @@ export const CommentList = component$(
                         q:slot='footer'
                         custom-button
                         class='custom-button--secondary'
-                        onClick$={() => onDeleteCancel(state)}
+                        onClick$={() => onDeleteCancel(dialogContext)}
                     >
                         NO, CANCEL
                         <Ripple />
@@ -89,7 +113,12 @@ export const CommentList = component$(
                         q:slot='footer'
                         custom-button
                         class='custom-button--danger'
-                        onClick$={() => deleteComment(state, props)}
+                        onClick$={() => {
+                            commentsService?.deleteComment(
+                                dialogContext.current!
+                            );
+                            dialogContext.current = undefined;
+                        }}
                     >
                         YES, DELETE
                         <Ripple />
@@ -100,3 +129,7 @@ export const CommentList = component$(
     },
     { tagName: 'div' }
 );
+
+export const onDeleteCancel = (context: Ref<string>) => {
+    context.current = undefined;
+};

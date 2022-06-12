@@ -16,6 +16,7 @@ import { Ripple } from '../ripple/Ripple';
 
 export interface CommentProps extends ChildComment {
     onReplyQrl?: QRL<() => void>;
+    onDeleteQrl?: QRL<() => void>;
 }
 
 export const getRating = (
@@ -93,11 +94,7 @@ export const Comment = component$<CommentProps>(
                     {isMyComment ? (
                         <>
                             <button
-                                onClick$={() => {
-                                    commentsService?.deleteComment(
-                                        props.commentId
-                                    );
-                                }}
+                                onClickQrl={props.onDeleteQrl}
                                 icon-button
                                 class='custom-button--danger'
                             >

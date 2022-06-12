@@ -43,6 +43,7 @@ export class Database {
     private preparedComments: CommentData[] = [];
     private modifiedComments: Map<CommentID, CommentData | ChildComment> =
         new Map();
+    private parentComments: Map<CommentID, CommentID> = new Map();
 
     constructor(private readonly ROOT: string) {}
 
@@ -90,6 +91,7 @@ export class Database {
             return commentNotFound(parentId);
         }
         parent.children.push(childComment);
+        this.parentComments.set(childComment.commentId, parentId);
         return childComment.commentId;
     }
 
@@ -117,9 +119,25 @@ export class Database {
         if (comment.user.userId !== userId) {
             throw new Error(`Unauthorized access to comment ${commentId}`);
         }
-        this.preparedComments = this.preparedComments.filter(
-            (c) => c.commentId !== commentId
-        );
+        const parentId = this.parentComments.get(commentId);
+        if (!parentId && 'children' in comment) {
+            this.preparedComments = this.preparedComments.filter(
+                (c) => c.commentId !== commentId
+            );
+            comment.children.forEach((c) => {
+                this.modifiedComments.delete(c.commentId);
+                this.parentComments.delete(c.commentId);
+            });
+        } else {
+            const parent = this.preparedComments.find(
+                (c) => c.commentId === parentId
+            )!;
+            parent.children = parent.children.filter(
+                (ch) => ch.commentId !== commentId
+            );
+            this.parentComments.delete(commentId);
+        }
+
         this.modifiedComments.delete(commentId);
         return commentId;
     }
@@ -242,6 +260,7 @@ export class Database {
             };
             parent.children.push(newComment);
             this.modifiedComments.set(newComment.commentId, newComment);
+            this.parentComments.set(newComment.commentId, parent.commentId);
         });
 
         this.RATINGS.forEach((rating) => {
