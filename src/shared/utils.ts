@@ -1,3 +1,15 @@
+import {
+    getPlatform,
+    implicit$FirstArg,
+    QRL,
+    useDocument,
+    useSequentialScope,
+    useWaitOn,
+    ValueOrPromise,
+} from '@builder.io/qwik';
+
+export type RunnableQrl = QRL<(event: unknown, element: Element) => void>;
+
 export type ClassList = {
     [className: string]: boolean;
 };
@@ -24,3 +36,18 @@ const toClassObject = (classes: ClassList | string): ClassList => {
     }
     return classes;
 };
+
+export function useClientMountOnlyQrl(
+    qrl: QRL<() => ValueOrPromise<void | (() => void)>>
+): void {
+    const [watch, setWatch] = useSequentialScope();
+    if (!watch) {
+        setWatch(true);
+        const isClient = !getPlatform(useDocument()).isServer;
+        if (isClient) {
+            useWaitOn(qrl.invoke());
+        }
+    }
+}
+
+export const useClientMountOnly$ = implicit$FirstArg(useClientMountOnlyQrl);

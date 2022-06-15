@@ -1,6 +1,7 @@
 import {
     component$,
     createContext,
+    mutable,
     useClientEffect$,
     useContextProvider,
     useDocument,
@@ -61,6 +62,7 @@ export const App = component$<AppContext>(
             commentsService: undefined,
             user: undefined,
         });
+        const document = useDocument();
 
         useContextProvider(FOCUS_TRAP, focusTrap);
         useContextProvider(COMMENTS_SERVICE, state);
@@ -85,17 +87,19 @@ export const App = component$<AppContext>(
         });
 
         useClientEffect$(() => {
-            initializeFocusTrap(focusTrap);
+            initializeFocusTrap(focusTrap, document);
             initializeCommentsService(state);
         });
 
-        return <CommentList comments={state.comments}></CommentList>;
+        return <CommentList comments={mutable(state.comments)}></CommentList>;
     },
     { tagName: 'main' }
 );
 
-export const initializeFocusTrap = (state: FocusTrapProvider) => {
-    const document = useDocument();
+export const initializeFocusTrap = (
+    state: FocusTrapProvider,
+    document: Document
+) => {
     const trap = createFocusTrap('', { document });
     state.trap = trap;
 };

@@ -1,49 +1,49 @@
 @use '@/shared/variables.scss' as *;
 
 ripple {
-	display: block;
-	position: absolute;
-	inset: 0;
-	overflow: hidden;
-	--ripple-y: 50%;
-	--ripple-x: 50%;
+    display: block;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    --ripple-y: 50%;
+    --ripple-x: 50%;
 
-	&::before {
-		content: '';
-		position: absolute;
-		display: block;
-		z-index: -1;
-		width: var(--ripple-size);
-		height: var(--ripple-size);
-		border-radius: 50%;
-		background-color: $colors__light-grayish-blue;
-		opacity: 0;
-		top: var(--ripple-y);
-		left: var(--ripple-x);
-		transform: scale(0);
-	}
+    &::before {
+        content: '';
+        position: relative;
+        display: block;
+        z-index: -1;
+        width: var(--ripple-size);
+        height: var(--ripple-size);
+        border-radius: 50%;
+        background-color: $colors__light-grayish-blue;
+        opacity: 0;
+        top: var(--ripple-y);
+        left: var(--ripple-x);
+        transform: scale(0);
+    }
 
-	&.ripple--drop:not(.ripple--fade)::before {
-		transition: opacity 0.1s linear, transform 0.3s linear;
-		opacity: 1;
-		transform: scale(1);
-	}
+    &.ripple--drop:not(.ripple--fade)::before {
+        transition: opacity 0.1s linear, transform 0.3s linear;
+        opacity: 1;
+        transform: scale(1);
+    }
 
-	&.ripple--fade::before {
-		transition: opacity 0.4s linear, transform 0.2s linear;
-		opacity: 0;
-		transform: scale(1);
-	}
+    &.ripple--fade::before {
+        transition: opacity 0.4s linear, transform 0.2s linear;
+        opacity: 0;
+        transform: scale(1);
+    }
 }
 
 @mixin adjust-ripple($background: $colors__light-grayish-blue, $opacity: 1) {
-	ripple {
-		&::before {
-			background-color: $background;
-		}
+    ripple {
+        &::before {
+            background-color: $background;
+        }
 
-		&.ripple--drop:not(.ripple--fade)::before {
-			opacity: $opacity;
-		}
-	}
+        &.ripple--drop:not(.ripple--fade)::before {
+            opacity: $opacity;
+        }
+    }
 }

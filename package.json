@@ -35,7 +35,7 @@
     "license": "",
     "private": true,
     "dependencies": {
-        "@builder.io/qwik": "0.0.20",
+        "@builder.io/qwik": "0.0.26",
         "@builder.io/qwik-dom": "^2.1.18",
         "@fastify/cookie": "^6.0.0",
         "@fastify/session": "^8.2.0",

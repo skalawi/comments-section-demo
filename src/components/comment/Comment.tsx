@@ -1,6 +1,6 @@
 import {
     component$,
-    QRL,
+    mutable,
     useContext,
     useRef,
     useStore,
@@ -10,13 +10,14 @@ import {
     CurrentUserData,
     UserRatingData,
 } from '../../models/models';
+import { RunnableQrl } from '../../shared/utils';
 import { COMMENTS_SERVICE } from '../app/app';
 import { Rating } from '../rating/Rating';
 import { Ripple } from '../ripple/Ripple';
 
 export interface CommentProps extends ChildComment {
-    onReplyQrl?: QRL<() => void>;
-    onDeleteQrl?: QRL<() => void>;
+    onReplyQrl?: RunnableQrl;
+    onDeleteQrl?: RunnableQrl;
 }
 
 export const getRating = (
@@ -47,10 +48,10 @@ export const Comment = component$<CommentProps>(
             <>
                 <Rating
                     classList={'comment__rating'}
-                    rating={props.rating}
-                    currentRating={
+                    rating={mutable(props.rating)}
+                    currentRating={mutable(
                         getRating(props.commentId, user!)?.rating || 0
-                    }
+                    )}
                     onRating$={(rating: number) => {
                         const current = getRating(props.commentId, user!);
                         if (!current) {
@@ -71,7 +72,7 @@ export const Comment = component$<CommentProps>(
                         loading='lazy'
                     ></img>
                     <a class='title__name'>{props.user.name}</a>
-                    {isMyComment && <span class='title__label'>YOU</span>}
+                    {isMyComment && <span class='title__label'>you</span>}
                     <time dateTime={props.date} class='title__date'>
                         {getRelativeTime(rtf, props.date)}
                     </time>

@@ -10,7 +10,8 @@ export const fastifyServer = (): Plugin => {
             fastify.ready();
             server.middlewares.use((req, res, next) => {
                 const url = req.originalUrl!;
-                const hasExtension = /\.[\w?=&]+$/.test(url);
+                const hasExtension =
+                    /\.[\w?=&]+$/.test(url) && !url.includes('build');
                 const isViteMod =
                     url.startsWith('/@') || url.includes('?html-proxy');
                 const isVitePing = url.includes('__vite_ping');

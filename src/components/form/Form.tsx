@@ -7,7 +7,6 @@ import {
     useClientEffect$,
     useRef,
     useStore,
-    useWatch$,
 } from '@builder.io/qwik';
 
 export interface FormProps {
@@ -42,9 +41,7 @@ export const Form = component$(
         });
         useCleanup$(() => {
             const { current: formElement } = form;
-            console.log('cleaning up');
             if (state.form && formElement) {
-                console.log('found element and cleaning');
                 formElement.removeEventListener('submit', state.form.listener);
             }
         });

@@ -36,35 +36,29 @@ export const Dialog = component$(
         const dialogRef = useRef<DialogElement>();
         const focusTrap = useContext(FOCUS_TRAP);
 
-        useWatch$(
-            (track) => {
-                const trap = track(focusTrap, 'trap');
-                if (trap) {
-                    state.trap = trap;
-                }
-            },
-            { run: 'visible' }
-        );
+        useWatch$((track) => {
+            const trap = track(focusTrap, 'trap');
+            if (trap) {
+                state.trap = trap;
+            }
+        });
 
-        useWatch$(
-            (track) => {
-                const opened = track(props, 'opened');
-                const dialog = dialogRef.current;
-                if (!dialog) {
-                    return;
-                }
-                if (opened && !dialog.open) {
-                    dialog.showModal();
-                    console.log(state.trap);
-                    state.trap?.updateContainerElements(dialog);
-                    state.trap?.activate();
-                } else if (!opened && dialog.open && !state.closing) {
-                    state.closing = true;
-                    state.trap?.deactivate();
-                }
-            },
-            { run: 'visible' }
-        );
+        useWatch$((track) => {
+            const opened = track(props, 'opened');
+            const dialog = dialogRef.current;
+            if (!dialog) {
+                return;
+            }
+            if (opened && !dialog.open) {
+                dialog.showModal();
+
+                state.trap?.updateContainerElements(dialog);
+                state.trap?.activate();
+            } else if (!opened && dialog.open && !state.closing) {
+                state.closing = true;
+                state.trap?.deactivate();
+            }
+        });
 
         return (
             <dialog

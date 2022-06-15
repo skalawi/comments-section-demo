@@ -68,7 +68,8 @@ rating {
         }
 
         @include ripple.adjust-ripple(
-            mix($colors__light-gray, $colors__grayish-blue, 50%)
+            mix($colors__light-gray, $colors__grayish-blue, 50%),
+            0.4
         );
 
         &.rating__button--checked {

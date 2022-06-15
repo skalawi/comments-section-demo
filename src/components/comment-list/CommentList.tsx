@@ -6,6 +6,7 @@ import {
     useContext,
     useRef,
     Ref,
+    mutable,
 } from '@builder.io/qwik';
 import { Dialog } from '../dialog/Dialog';
 import { Ripple } from '../ripple/Ripple';
@@ -18,7 +19,7 @@ export interface CommentListProps {
     comments: CommentData[];
 }
 
-export interface ListState {
+export interface ListState extends CommentListProps {
     deleteDialogOpened: boolean;
     deleteId?: string;
     activeComments: Record<string, UserData>;
@@ -30,6 +31,7 @@ export const CommentList = component$(
         const state: ListState = useStore({
             deleteDialogOpened: false,
             activeComments: {},
+            comments: props.comments,
         });
         const dialogContext = useRef<string>();
         useWatch$((track) => {
@@ -41,19 +43,32 @@ export const CommentList = component$(
             }
         });
 
+        useWatch$((track) => {
+            const comments = track(props, 'comments');
+            if (comments) {
+                state.comments = comments;
+            }
+        });
+
         return (
             <Host class='main-container'>
-                {props.comments.map((comment) => {
-                    const { children, ...parentComment } = comment;
+                {state.comments.map((comment) => {
+                    const { children, user, rating, ...parentComment } =
+                        comment;
                     const parentId = parentComment.commentId;
+
                     return (
                         <>
                             <Comment
                                 class='comment'
+                                user={mutable(user)}
+                                rating={mutable(rating)}
                                 {...parentComment}
                                 onReply$={() => {
-                                    state.activeComments[parentId] =
-                                        parentComment.user;
+                                    state.activeComments = {
+                                        ...state.activeComments,
+                                        [parentId]: user,
+                                    };
                                 }}
                                 onDelete$={() => {
                                     dialogContext.current = comment.commentId;
@@ -64,9 +79,13 @@ export const CommentList = component$(
                                     <Comment
                                         class='comment'
                                         {...childComment}
+                                        rating={mutable(childComment.rating)}
+                                        user={mutable(childComment.user)}
                                         onReply$={() => {
-                                            state.activeComments[parentId] =
-                                                childComment.user;
+                                            state.activeComments = {
+                                                ...state.activeComments,
+                                                [parentId]: childComment.user,
+                                            };
                                         }}
                                         onDelete$={() => {
                                             dialogContext.current =
@@ -76,8 +95,11 @@ export const CommentList = component$(
                                 ))}
                                 {state.activeComments[parentId] && (
                                     <CommentForm
+                                        autofocus={true}
                                         parentId={parentId}
-                                        user={state.activeComments[parentId]}
+                                        user={mutable(
+                                            state.activeComments[parentId]
+                                        )}
                                         onAfterSubmit$={() => {
                                             delete state.activeComments[
                                                 parentId
@@ -92,7 +114,7 @@ export const CommentList = component$(
                 <CommentForm></CommentForm>
                 <Dialog
                     class='delete-dialog'
-                    opened={state.deleteDialogOpened}
+                    opened={mutable(state.deleteDialogOpened)}
                     onDialogclose$={() => onDeleteCancel(dialogContext)}
                 >
                     <h1 q:slot='header'>Delete comment</h1>

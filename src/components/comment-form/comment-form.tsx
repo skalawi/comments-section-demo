@@ -1,16 +1,17 @@
 import {
-    $,
     component$,
     QRL,
     useContext,
     useRef,
-    useStore,
+    useWatch$,
 } from '@builder.io/qwik';
 import { UserData } from '../../models/models';
 import { COMMENTS_SERVICE } from '../app/app';
 import { Form } from '../form/Form';
+import { Ripple } from '../ripple/Ripple';
 
 export interface CommentFormProps {
+    autofocus?: boolean;
     parentId?: string;
     user?: UserData;
     onAfterSubmitQrl?: QRL<() => void>;
@@ -18,8 +19,15 @@ export interface CommentFormProps {
 
 export const CommentForm = component$(
     (props: CommentFormProps) => {
-        const { user, commentsService } = useContext(COMMENTS_SERVICE);
+        const context = useContext(COMMENTS_SERVICE);
         const textarea = useRef<HTMLTextAreaElement>();
+        useWatch$((track) => {
+            const el = track(textarea, 'current');
+            if (el && props.autofocus) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                el.focus({ preventScroll: true });
+            }
+        });
 
         return (
             <Form
@@ -29,7 +37,7 @@ export const CommentForm = component$(
                     const { current: input } = textarea;
                     if (input?.value) {
                         if (props.parentId) {
-                            commentsService
+                            context.commentsService
                                 ?.addChildComment(
                                     { message: input.value },
                                     props.parentId
@@ -39,7 +47,7 @@ export const CommentForm = component$(
                                     props.onAfterSubmitQrl?.invoke();
                                 });
                         } else {
-                            commentsService
+                            context.commentsService
                                 ?.addComment({ message: input.value })
                                 .then(() => {
                                     input.value = '';
@@ -50,9 +58,9 @@ export const CommentForm = component$(
                 }}
             >
                 <img
-                    src={user?.image}
+                    src={context.user?.image}
                     class='comment-form__image'
-                    alt={`${user?.name} avatar`}
+                    alt={`${context.user?.name} avatar`}
                     loading='lazy'
                 ></img>
                 <textarea
@@ -70,6 +78,7 @@ export const CommentForm = component$(
                     custom-button
                 >
                     {props.parentId ? 'REPLY' : 'SEND'}
+                    <Ripple></Ripple>
                 </button>
             </Form>
         );

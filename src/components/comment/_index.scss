@@ -90,9 +90,10 @@
 
         .title__label {
             background-color: $colors__moderate-blue;
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 0 8px;
+            font-weight: 500;
+            border-radius: 2px;
+            margin-bottom: 2px;
             color: $colors__white;
         }
     }
